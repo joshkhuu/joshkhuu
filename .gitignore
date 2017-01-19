@@ -3,3 +3,4 @@ node_modules
 .tmp
 .sass-cache
 builds/development/_template/*
+builds/development/img
