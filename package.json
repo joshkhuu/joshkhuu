@@ -1,0 +1,15 @@
+{
+  "name": "resume",
+  "version": "1.0.0",
+  "description": "One page outlining skill set and portfolio for employers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Josh Khuu",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "?.git"
+  }
+}
