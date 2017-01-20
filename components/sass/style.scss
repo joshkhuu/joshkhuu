@@ -1,8 +1,9 @@
 // style.scss
 // ==========
 
-// Compass imports
+// Compass
 @import "compass";
+@import "compass/reset";
 
 // Core partials
 @import "variables";
@@ -10,5 +11,9 @@
 @import "base";
 @import "modules";
 
-// JS partials	
+// Bootstrap;
+@import "bootstrap";
+
+// JS partials
+@import "fontAwesome";	
 @import "prettyPhoto";
