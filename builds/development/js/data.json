@@ -5,7 +5,7 @@
     "fromdate" : "2005",
     "todate" : "Present",
     "description":"Node.js, SASS, Gulp"
- },
+  },
   { 
     "company":"Alliance Marketing Corporation",
     "role":"Senior Programmer",
