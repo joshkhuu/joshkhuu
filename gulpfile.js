@@ -81,6 +81,7 @@ gulp.task('watch', function(){
 	gulp.watch('components/sass/*.scss', ['compass']);
 	gulp.watch(htmlSources, ['html']);
 	gulp.watch(jsonSources, ['json']);
+	gulp.watch('builds/development/img/**/*.*', ['images']);
 });
 
 gulp.task('connect', function(){
@@ -97,6 +98,12 @@ gulp.task ('html', function(){
 		.pipe(connect.reload())
 });
 
+gulp.task ('images', function(){
+	gulp.src('builds/development/img/**/*.*')
+		.pipe(gulpif(env === 'production', gulp.dest(outputDir + 'img')))
+		.pipe(connect.reload())
+});
+
 gulp.task ('json', function(){
 	gulp.src(jsonSources)
 		.pipe(gulpif(env === 'production', jsonMinify()))
@@ -105,4 +112,4 @@ gulp.task ('json', function(){
 });
 
 // Run all tasks for development
-gulp.task('default', ['html','coffee', 'js', 'json', 'compass', 'connect', 'watch']);
+gulp.task('default', ['html', 'coffee', 'js', 'json', 'compass', 'images', 'connect', 'watch']);
