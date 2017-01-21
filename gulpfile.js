@@ -6,6 +6,7 @@ var compass = require('gulp-compass');
 var connect = require('gulp-connect');
 var gulpif = require('gulp-if');
 var uglify = require('gulp-uglify');
+var minifyHTML = require('gulp-minify-html');
 var concat = require('gulp-concat');
 
 var env, 
@@ -37,7 +38,7 @@ jsSources = [
 	'components/scripts/template.js'
 	];
 sassSources = ['components/sass/style.scss'];
-htmlSources = [outputDir + '*.html'];
+htmlSources = ['builds/development/*.html'];
 jsonSources = [outputDir + 'js/*.json'];
 
 // Transpile Coffeescript to Javascript
@@ -90,7 +91,9 @@ gulp.task('connect', function(){
 
 gulp.task ('html', function(){
 	gulp.src(htmlSources)
-	.pipe(connect.reload())
+		.pipe(gulpif(env === 'production', minifyHTML()))
+		.pipe(gulpif(env === 'production', gulp.dest(outputDir)))
+		.pipe(connect.reload())
 });
 
 gulp.task ('json', function(){
@@ -98,5 +101,5 @@ gulp.task ('json', function(){
 	.pipe(connect.reload())
 });
 
-// Run all tasks for developement
+// Run all tasks for development
 gulp.task('default', ['html','coffee', 'js', 'json', 'compass', 'connect', 'watch']);
