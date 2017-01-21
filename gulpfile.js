@@ -7,6 +7,7 @@ var connect = require('gulp-connect');
 var gulpif = require('gulp-if');
 var uglify = require('gulp-uglify');
 var minifyHTML = require('gulp-minify-html');
+var jsonMinify = require('gulp-jsonminify');
 var concat = require('gulp-concat');
 
 var env, 
@@ -39,7 +40,7 @@ jsSources = [
 	];
 sassSources = ['components/sass/style.scss'];
 htmlSources = ['builds/development/*.html'];
-jsonSources = [outputDir + 'js/*.json'];
+jsonSources = ['builds/development/js/*.json'];
 
 // Transpile Coffeescript to Javascript
 gulp.task('coffee', function(){
@@ -98,7 +99,9 @@ gulp.task ('html', function(){
 
 gulp.task ('json', function(){
 	gulp.src(jsonSources)
-	.pipe(connect.reload())
+		.pipe(gulpif(env === 'production', jsonMinify()))
+		.pipe(gulpif(env === 'production', gulp.dest('builds/production/js')))
+		.pipe(connect.reload())
 });
 
 // Run all tasks for development
