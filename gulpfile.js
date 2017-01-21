@@ -26,7 +26,7 @@ env = 'production';
 
 if (env === 'development'){
 	outputDir = 'builds/development/';
-	sassStyle = 'expanded';
+	sassStyle = 'compact';
 }else {
 	outputDir = 'builds/production/';
 	sassStyle = 'compressed';
@@ -62,33 +62,16 @@ gulp.task('js', function(){
 });
 
 // Concat all Javscript to scripts.js
-gulp.task('compass', function(){
-	gulp.src(sassSources)
-		.pipe(compass({
-			sass: 'components/sass',
-			image: outputDir + 'img',
-			style: sassStyle
-		})
-		.on('error', gutil.log))
-		.pipe(gulp.dest(outputDir + 'css'))
-		.pipe(connect.reload())
-});
-
-// Watch for changes
-gulp.task('watch', function(){
-	gulp.watch(coffeeSources, ['coffee']);
-	gulp.watch(jsSources, ['js']);
-	gulp.watch('components/sass/*.scss', ['compass']);
-	gulp.watch(htmlSources, ['html']);
-	gulp.watch(jsonSources, ['json']);
-	gulp.watch('builds/development/img/**/*.*', ['images']);
-});
-
-gulp.task('connect', function(){
-	connect.server({
-		root : outputDir,
-		livereload : true
-	});
+gulp.task('compass', function() {
+  	gulp.src(sassSources)
+	    .pipe(compass({
+	      sass: 'components/sass',
+	      image: outputDir + 'img',
+	      style: sassStyle
+	    })
+	    .on('error', gutil.log))
+	    .pipe(gulp.dest(outputDir + 'css'))
+	    .pipe(connect.reload())
 });
 
 gulp.task ('html', function(){
@@ -104,6 +87,12 @@ gulp.task ('images', function(){
 		.pipe(connect.reload())
 });
 
+gulp.task ('fonts', function(){
+	gulp.src('builds/development/fonts/**/*.*')
+		.pipe(gulpif(env === 'production', gulp.dest(outputDir + 'fonts')))
+		.pipe(connect.reload())
+});
+
 gulp.task ('json', function(){
 	gulp.src(jsonSources)
 		.pipe(gulpif(env === 'production', jsonMinify()))
@@ -111,5 +100,23 @@ gulp.task ('json', function(){
 		.pipe(connect.reload())
 });
 
+gulp.task('connect', function(){
+	connect.server({
+		root : outputDir,
+		livereload : true
+	});
+});
+
+// Watch for changes
+gulp.task('watch', function(){
+	gulp.watch(coffeeSources, ['coffee']);
+	gulp.watch(jsSources, ['js']);
+	gulp.watch('components/sass/*.scss', ['compass']);
+	gulp.watch(htmlSources, ['html']);
+	gulp.watch(jsonSources, ['json']);
+	gulp.watch('builds/development/img/**/*.*', ['images']);
+	gulp.watch('builds/development/fonts/**/*.*', ['fonts']);
+});
+
 // Run all tasks for development
-gulp.task('default', ['html', 'coffee', 'js', 'json', 'compass', 'images', 'connect', 'watch']);
+gulp.task('default', ['html', 'coffee', 'js', 'json', 'compass', 'images', 'fonts', 'connect', 'watch']);
